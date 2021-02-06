@@ -18,10 +18,7 @@ now = datetime.now(pytz.timezone('America/New_York'))
 print("Today is {}".format(now.date()))
 
 try:
-    if not os.getcwd().endswith("src"):
-        os.chdir("./src")
-
-    os.mkdir("../images/{}".format(now.date().__str__()))
+    os.mkdir("./images/{}".format(now.date().__str__()))
 except FileExistsError:
     pass
 
@@ -40,9 +37,9 @@ def scraper(mode="Firefox"):
     options = Options()
     options.headless = True
     if mode == "Firefox":
-        driver = webdriver.Firefox(options=options, executable_path='../geckodriver')
+        driver = webdriver.Firefox(options=options, executable_path='geckodriver')
     elif mode == "Remote":
-        driver = webdriver.Remote(command_executor="http://127.0.0.1:4444/wd/hub", options=options)
+        driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", options=options)
     driver.implicitly_wait(5)
 
     # Pull case data from NJ Covid Dashboard at https://njhealth.maps.arcgis.com/apps/opsdashboard/index.html#/795729487af44255a1357c73fd8d8b4e
@@ -87,7 +84,7 @@ def scraper(mode="Firefox"):
     covid_df.sort_index(axis=1, inplace=True)
     covid_df["Population"] = county_pops
 
-    covid_df.to_csv("../data/nj_covid_{}.csv".format(now.date()), index_label="County")
+    covid_df.to_csv("./data/nj_covid_{}.csv".format(now.date()), index_label="County")
 
     # Normalize df and create discrepancy columns
     scaler = StandardScaler().fit(covid_df)
@@ -104,7 +101,7 @@ def scraper(mode="Firefox"):
 
 def imager(data_dict, palette, name):
     colors = chivaxbot.get_colors_dict(data_dict, palette, "vax")
-    chivaxbot.write_svg("../images/New_Jersey_Counties_Outline.svg", "../images/{}/{}_{}.png".format(now.date(), name, now.date()), colors)
+    chivaxbot.write_svg("./images/New_Jersey_Counties_Outline.svg", "./images/{}/{}_{}.png".format(now.date(), name, now.date()), colors)
 
     print("{} imaging successful!".format(name))
 
