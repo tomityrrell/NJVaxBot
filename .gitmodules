@@ -1,0 +1,3 @@
+[submodule "chivaxbot"]
+	path = chivaxbot
+	url = ../../Github/chivaxbot
